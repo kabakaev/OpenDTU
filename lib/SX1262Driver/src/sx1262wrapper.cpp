@@ -55,12 +55,13 @@ constexpr uint8_t CalImg902_1 = 0xE1;
 constexpr uint8_t CalImg902_2 = 0xE9;
 } // namespace
 
-SX1262Radio::SX1262Radio(SPIClass* spi, uint8_t pin_cs, uint8_t pin_busy, int8_t pin_rst, int8_t pin_irq)
+SX1262Radio::SX1262Radio(SPIClass* spi, uint8_t pin_cs, uint8_t pin_busy, int8_t pin_rst, int8_t pin_irq, int8_t pin_rf_sw)
     : _spi(spi)
     , _pinCs(pin_cs)
     , _pinBusy(pin_busy)
     , _pinRst(pin_rst)
     , _pinIrq(pin_irq)
+    , _pinRfSw(pin_rf_sw)
 {
 }
 
@@ -74,6 +75,10 @@ bool SX1262Radio::begin()
     }
     if (_pinRst >= 0) {
         pinMode(_pinRst, OUTPUT);
+    }
+    if (_pinRfSw >= 0) {
+        pinMode(_pinRfSw, OUTPUT);
+        digitalWrite(_pinRfSw, HIGH);
     }
 
     if (!resetChip()) {

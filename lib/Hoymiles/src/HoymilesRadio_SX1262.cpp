@@ -26,11 +26,11 @@ constexpr CountryFrequencyDefinition_t getCountryDefinition(CountryModeId_t mode
 }
 } // namespace
 
-void HoymilesRadio_SX1262::init(SPIClass* initialisedSpiBus, uint8_t pinCS, uint8_t pinBusy, int8_t pinReset, int8_t pinIrq)
+void HoymilesRadio_SX1262::init(SPIClass* initialisedSpiBus, uint8_t pinCS, uint8_t pinBusy, int8_t pinReset, int8_t pinIrq, int8_t pinRfSw)
 {
     _dtuSerial.u64 = 0;
 
-    _radio.reset(new SX1262Radio(initialisedSpiBus, pinCS, pinBusy, pinReset, pinIrq));
+    _radio.reset(new SX1262Radio(initialisedSpiBus, pinCS, pinBusy, pinReset, pinIrq, pinRfSw));
     if (!_radio->begin()) {
         ESP_LOGE(TAG, "SX1262: Initialization failed");
         return;
@@ -219,16 +219,24 @@ void HoymilesRadio_SX1262::sendEsbPacket(CommandAbstract& cmd)
     const bool isChannelChange = (cmd.getDataPayload()[0] == 0x56);
 
     if (isChannelChange) {
-        // Dual-frequency bootstrap: alternate 900/915 MHz on each retry
-        // Use setChannel(0) for 900 MHz and setChannel(60) for 915 MHz
-        // to bypass country-mode range validation on boot frequencies
-        const uint8_t bootChannels[] = { 0, 60 };
-        const uint8_t idx = (cmd.getSendCount() - 1) % 2;
-        _radio->setChannel(bootChannels[idx]);
+        uint8_t bootChannel;
+        if (getCountryDefinition(_countryMode).Band == FrequencyBand_t::BAND_860) {
+            bootChannel = getChannelFromFrequency(getInvBootFrequency());
+            if (bootChannel == 0xFF) {
+                bootChannel = 32; // Fallback to 868.0 MHz on 860 MHz band
+            }
+        } else {
+            // Dual-frequency bootstrap on 900 MHz band: alternate 900/915 MHz on each retry.
+            // Use setChannel(0) for 900 MHz and setChannel(60) for 915 MHz
+            // to bypass country-mode range validation on boot frequencies.
+            const uint8_t bootChannels[] = { 0, 60 };
+            bootChannel = bootChannels[(cmd.getSendCount() - 1) % 2];
+        }
+        _radio->setChannel(bootChannel);
         ESP_LOGI(TAG, "ChannelChange: target_ch=%u target_freq=%.3f MHz, TX on boot_freq=%.3f MHz (attempt %u)",
             cmd.getDataPayload()[12],
             getFrequencyFromChannel(cmd.getDataPayload()[12]) / 1000000.0,
-            getFrequencyFromChannel(bootChannels[idx]) / 1000000.0,
+            getFrequencyFromChannel(bootChannel) / 1000000.0,
             cmd.getSendCount());
     } else {
         // Ensure radio is on work freq before TX (hop may have changed it)
@@ -471,4 +479,3 @@ bool HoymilesRadio_SX1262::switchDtuFreq(uint32_t frequency)
     _radio->setChannel(channel);
     return true;
 }
-

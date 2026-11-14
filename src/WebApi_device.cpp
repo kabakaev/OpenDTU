@@ -58,6 +58,7 @@ void WebApiDeviceClass::onDeviceAdminGet(AsyncWebServerRequest* request)
     sx1262PinObj["irq"] = pin.sx1262_irq;
     sx1262PinObj["miso"] = pin.sx1262_miso;
     sx1262PinObj["mosi"] = pin.sx1262_mosi;
+    sx1262PinObj["rf_sw"] = pin.sx1262_rf_sw;
 
     auto w5500PinObj = curPin["w5500"].to<JsonObject>();
     w5500PinObj["sclk"] = pin.w5500_sclk;

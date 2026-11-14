@@ -34,6 +34,7 @@ struct PinMapping_t {
     gpio_num_t sx1262_busy;
     gpio_num_t sx1262_rst;
     gpio_num_t sx1262_irq;
+    gpio_num_t sx1262_rf_sw;
 
     gpio_num_t w5500_mosi;
     gpio_num_t w5500_miso;

@@ -20,7 +20,7 @@ public:
     void init();
     void initNRF(SPIClass* initialisedSpiBus, const uint8_t pinCE, const uint8_t pinIRQ);
     void initCMT(const int8_t pin_sdio, const int8_t pin_clk, const int8_t pin_cs, const int8_t pin_fcs, const int8_t pin_gpio2, const int8_t pin_gpio3);
-    void initSX1262(SPIClass* initialisedSpiBus, const uint8_t pinCS, const uint8_t pinBusy, const int8_t pinReset, const int8_t pinIrq);
+    void initSX1262(SPIClass* initialisedSpiBus, const uint8_t pinCS, const uint8_t pinBusy, const int8_t pinReset, const int8_t pinIrq, const int8_t pinRfSw = -1);
     void loop();
 
     std::shared_ptr<InverterAbstract> addInverter(const char* name, const uint64_t serial);

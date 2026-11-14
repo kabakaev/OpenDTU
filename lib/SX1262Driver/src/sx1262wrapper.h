@@ -7,7 +7,7 @@
 
 class SX1262Radio {
 public:
-    SX1262Radio(SPIClass* spi, uint8_t pin_cs, uint8_t pin_busy, int8_t pin_rst, int8_t pin_irq);
+    SX1262Radio(SPIClass* spi, uint8_t pin_cs, uint8_t pin_busy, int8_t pin_rst, int8_t pin_irq, int8_t pin_rf_sw = -1);
 
     bool begin();
     bool isChipConnected() const;
@@ -105,6 +105,7 @@ private:
     uint8_t _pinBusy;
     int8_t _pinRst;
     int8_t _pinIrq;
+    int8_t _pinRfSw;
 
     bool _connected = false;
     FrequencyBand_t _frequencyBand = FrequencyBand_t::BAND_860;

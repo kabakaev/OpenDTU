@@ -12,7 +12,7 @@
 
 class HoymilesRadio_SX1262 : public HoymilesRadio_SubGhz {
 public:
-    void init(SPIClass* initialisedSpiBus, uint8_t pinCS, uint8_t pinBusy, int8_t pinReset, int8_t pinIrq);
+    void init(SPIClass* initialisedSpiBus, uint8_t pinCS, uint8_t pinBusy, int8_t pinReset, int8_t pinIrq, int8_t pinRfSw = -1);
     void loop();
 
     void setPALevel(int8_t paLevel) override;

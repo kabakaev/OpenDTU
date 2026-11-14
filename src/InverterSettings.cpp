@@ -64,7 +64,7 @@ void InverterSettingsClass::init(Scheduler& scheduler)
 
         SPIClass* spiClass = new SPIClass(*spi_bus);
         spiClass->begin(pin.sx1262_clk, pin.sx1262_miso, pin.sx1262_mosi, pin.sx1262_cs);
-        Hoymiles.initSX1262(spiClass, pin.sx1262_cs, pin.sx1262_busy, pin.sx1262_rst, pin.sx1262_irq);
+        Hoymiles.initSX1262(spiClass, pin.sx1262_cs, pin.sx1262_busy, pin.sx1262_rst, pin.sx1262_irq, pin.sx1262_rf_sw);
         ESP_LOGI(TAG, "SX1262: Setting country mode...");
         Hoymiles.getRadioSx1262()->setCountryMode(static_cast<CountryModeId_t>(config.Dtu.Sx1262.CountryMode));
         ESP_LOGI(TAG, "SX1262: Setting target frequency...");

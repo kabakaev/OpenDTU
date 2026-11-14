@@ -43,9 +43,9 @@ void HoymilesClass::initCMT(const int8_t pin_sdio, const int8_t pin_clk, const i
     _radioCmt->init(pin_sdio, pin_clk, pin_cs, pin_fcs, pin_gpio2, pin_gpio3);
 }
 
-void HoymilesClass::initSX1262(SPIClass* initialisedSpiBus, const uint8_t pinCS, const uint8_t pinBusy, const int8_t pinReset, const int8_t pinIrq)
+void HoymilesClass::initSX1262(SPIClass* initialisedSpiBus, const uint8_t pinCS, const uint8_t pinBusy, const int8_t pinReset, const int8_t pinIrq, const int8_t pinRfSw)
 {
-    _radioSx1262->init(initialisedSpiBus, pinCS, pinBusy, pinReset, pinIrq);
+    _radioSx1262->init(initialisedSpiBus, pinCS, pinBusy, pinReset, pinIrq, pinRfSw);
 }
 
 void HoymilesClass::loop()

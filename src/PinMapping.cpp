@@ -116,6 +116,10 @@ static const char* TAG = "pinmapping";
 #define SX1262_MOSI GPIO_NUM_NC
 #endif
 
+#ifndef SX1262_RF_SW
+#define SX1262_RF_SW GPIO_NUM_NC
+#endif
+
 #ifndef W5500_MOSI
 #define W5500_MOSI GPIO_NUM_NC
 #endif
@@ -194,6 +198,7 @@ PinMappingClass::PinMappingClass()
     _pinMapping.sx1262_irq = SX1262_IRQ;
     _pinMapping.sx1262_miso = SX1262_MISO;
     _pinMapping.sx1262_mosi = SX1262_MOSI;
+    _pinMapping.sx1262_rf_sw = SX1262_RF_SW;
 
     _pinMapping.w5500_mosi = W5500_MOSI;
     _pinMapping.w5500_miso = W5500_MISO;
@@ -284,6 +289,7 @@ bool PinMappingClass::init(const String& deviceMapping)
             _pinMapping.sx1262_irq = doc[i]["sx1262"]["irq"] | SX1262_IRQ;
             _pinMapping.sx1262_miso = doc[i]["sx1262"]["miso"] | SX1262_MISO;
             _pinMapping.sx1262_mosi = doc[i]["sx1262"]["mosi"] | SX1262_MOSI;
+            _pinMapping.sx1262_rf_sw = doc[i]["sx1262"]["rf_sw"] | SX1262_RF_SW;
 
             _pinMapping.w5500_mosi = doc[i]["w5500"]["mosi"] | W5500_MOSI;
             _pinMapping.w5500_miso = doc[i]["w5500"]["miso"] | W5500_MISO;
